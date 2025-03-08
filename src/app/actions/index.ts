@@ -68,13 +68,30 @@ async function createChat({
   return { data, error };
 }
 
+// async function allChats(currentUser: string) {
+//   const { data, error } = await supabase
+//     .from("Chat")
+//     .select("*")
+//     .or(`user1.eq.${currentUser},user2.eq.${currentUser}`)
+//     .order("created_at", { ascending: false });
+//   return { data, error };
+// }
+
 async function allChats(currentUser: string) {
   const { data, error } = await supabase
     .from("Chat")
     .select("*")
-    .or(`user1.eq.${currentUser},user2.eq.${currentUser}`)
-    .order("created_at", { ascending: false });
-  return { data, error };
+    .or(`user1.eq.${currentUser},user2.eq.${currentUser}`);
+
+  if (error) return { data: null, error };
+
+  const sortedData = data?.sort(
+    (a, b) =>
+      new Date(b.lastMessage?.created_at).getTime() -
+      new Date(a.lastMessage?.created_at).getTime()
+  );
+
+  return { data: sortedData, error: null };
 }
 
 async function getChat(username: string) {
