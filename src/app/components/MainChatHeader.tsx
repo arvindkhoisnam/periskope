@@ -1,8 +1,17 @@
 import { BsStars } from "react-icons/bs";
 import { IoSearch } from "react-icons/io5";
+import { useCompHeight } from "../store";
+import { useEffect, useRef } from "react";
 function MainChatHeader({ recepient }: { recepient?: string }) {
+  const setCompHeight = useCompHeight((state) => state.setRefHeight2);
+  const ref2 = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (ref2.current) {
+      setCompHeight(ref2.current.offsetHeight);
+    }
+  }, [setCompHeight]);
   return (
-    <div className="">
+    <div ref={ref2}>
       <div className="border border-neutral-200 p-2 flex justify-between">
         <div className="flex items-center gap-3">
           <span className="size-10 rounded-full bg-neutral-300 flex justify-center items-center"></span>

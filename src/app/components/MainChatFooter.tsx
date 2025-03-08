@@ -7,16 +7,24 @@ import { BsStars } from "react-icons/bs";
 import { FaFileAlt } from "react-icons/fa";
 import { FaMicrophone } from "react-icons/fa";
 import CustomIcon from "./CustomIcon";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendMessage } from "../actions";
-import { useCurrentUser, useDisplayChat, useRecipientUser } from "../store";
+import {
+  useCompHeight,
+  useCurrentUser,
+  useDisplayChat,
+  useRecipientUser,
+} from "../store";
+
 function MainChatFooter() {
   const [messageody, setMessageBody] = useState("");
   const queryClient = useQueryClient();
   const recipientUser = useRecipientUser((state) => state.recipientUser);
   const currentUser = useCurrentUser((state) => state.currentUser);
   const setChatId = useDisplayChat((state) => state.setChatId);
+  const setCompHeight = useCompHeight((state) => state.setRefHeight3);
+  const ref3 = useRef<HTMLDivElement | null>(null);
   const { mutate } = useMutation({
     mutationFn: sendMessage,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -27,8 +35,13 @@ function MainChatFooter() {
       queryClient.invalidateQueries({ queryKey: ["chats"] });
     },
   });
+  useEffect(() => {
+    if (ref3.current) {
+      setCompHeight(ref3.current.offsetHeight);
+    }
+  }, [setCompHeight]);
   return (
-    <div className="bg-neutral-100 flex flex-col p-1">
+    <div className="bg-neutral-100 flex flex-col p-1" ref={ref3}>
       <div className="flex">
         <textarea
           onKeyDown={(e) => {

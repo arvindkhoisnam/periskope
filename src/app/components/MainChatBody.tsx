@@ -1,7 +1,12 @@
 "use client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getMessages } from "../actions";
-import { useCurrentUser, useDisplayChat, useMessages } from "../store";
+import {
+  useCompHeight,
+  useCurrentUser,
+  useDisplayChat,
+  useMessages,
+} from "../store";
 import { useEffect, useRef } from "react";
 import { useSupabaseSubscription } from "../subscriptions";
 
@@ -12,7 +17,9 @@ function MainChatBody() {
   const setMessages = useMessages((state) => state.setMessages);
   const chatId = useDisplayChat((state) => state.chatId);
   const queryClient = useQueryClient();
-
+  const ref1Height = useCompHeight((state) => state.ref1);
+  const ref2Height = useCompHeight((state) => state.ref2);
+  const ref3Height = useCompHeight((state) => state.ref3);
   const handleInserts = async (payload: { new: { id: string } }) => {
     if (payload.new.id === chatId) {
       const msgs = await getMessages(chatId);
@@ -27,11 +34,13 @@ function MainChatBody() {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [messages]);
+  console.log(`total height to deduct ${ref1Height + ref2Height + ref3Height}`);
   return (
     <div
       ref={containerRef}
-      className="flex flex-col h-[calc(100vh-194px)] overflow-y-auto px-2 py-2"
+      className={`flex flex-col overflow-y-auto px-2 py-2`}
       style={{
+        height: `calc(100vh - ${ref1Height}px - ${ref2Height}px - ${ref3Height}px)`,
         backgroundImage:
           "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')",
         backgroundSize: "contain",
