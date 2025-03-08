@@ -61,34 +61,10 @@ const useMessages = create<messagesType>((set) => ({
   },
 }));
 
-type compHeights = {
-  ref1: number;
-  ref2: number;
-  ref3: number;
-  setRefHeight1: (height: number) => void;
-  setRefHeight2: (height: number) => void;
-  setRefHeight3: (height: number) => void;
-};
-
-const useCompHeight = create<compHeights>((set) => ({
-  ref1: 0,
-  ref2: 0,
-  ref3: 0,
-  setRefHeight1: (height) => {
-    set({ ref1: height });
-  },
-  setRefHeight2: (height) => {
-    set({ ref2: height });
-  },
-  setRefHeight3: (height) => {
-    set({ ref3: height });
-  },
-}));
 export {
   useCurrentUser,
   useDisplayChat,
   useModalOpen,
   useRecipientUser,
   useMessages,
-  useCompHeight,
 };
